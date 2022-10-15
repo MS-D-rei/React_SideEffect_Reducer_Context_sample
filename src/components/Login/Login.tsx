@@ -8,7 +8,7 @@ import {
 } from '@/components/Login/Style';
 import { StyledButton } from '@/components/UI/Button/StyledButton';
 
-function Login(props) {
+function Login(props: { onLogin: Function }) {
   const [emailPassword, setEmailPassword] = useState({
     email: '',
     password: '',
@@ -27,7 +27,7 @@ function Login(props) {
     }));
     setIsValidForm(
       !!event.target.value.match(emailRegEx) &&
-        emailPassword.password.trim().length > 8
+        emailPassword.password.trim().length >= 8
     );
   };
 
@@ -39,27 +39,29 @@ function Login(props) {
       password: event.target.value,
     }));
     setIsValidForm(
-      !!event.target.value.match(emailRegEx) &&
-        emailPassword.password.trim().length > 8
+      !!emailPassword.email.match(emailRegEx) &&
+        event.target.value.trim().length >= 8
     );
   };
 
   const validateEmailHandler = () => {
     setIsValidEmail(!!emailPassword.email.match(emailRegEx));
-  }
+    // setIsValidForm(isValidEmail && isValidPassword);
+  };
 
   const validatePasswordHandler = () => {
-    setIsValidPassword(emailPassword.password.trim().length > 8);
-  }
+    setIsValidPassword(emailPassword.password.trim().length >= 8);
+    // setIsValidForm(isValidEmail && isValidPassword);
+  };
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     props.onLogin(emailPassword.email, emailPassword.password);
-  }
+  };
 
   return (
     <StyledCardLogin>
-      <form onSubmit={}>
+      <form onSubmit={submitHandler}>
         <StyledFormControl>
           <StyledLabel htmlFor="email">E-Mail</StyledLabel>
           <StyledInput
@@ -89,3 +91,5 @@ function Login(props) {
     </StyledCardLogin>
   );
 }
+
+export default Login;

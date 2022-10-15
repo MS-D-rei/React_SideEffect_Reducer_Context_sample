@@ -35,13 +35,14 @@ interface InputProps {
 }
 
 export const StyledInput = styled.input<InputProps>`
+  display: block;
   flex: 3;
   font: inherit;
   padding: 0.35rem 0.35rem;
   border-radius: 6px;
   border: 1px solid #ccc;
-  border-color: ${(props) => (props.isValid ? '#ccc' : 'red')}
-  background: ${(props) => (props.isValid ? 'transparent' : '#f6dbfc')}
+  border-color: ${(props) => (props.isValid ? '#ccc' : 'red')};
+  background: ${(props) => (props.isValid ? 'transparent' : '#fbdada')};
 
   &:focus {
     outline: none;

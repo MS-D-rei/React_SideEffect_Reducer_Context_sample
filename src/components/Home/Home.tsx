@@ -1,6 +1,6 @@
 import { StyledCardHome } from '@/components/Home/Style'
 
-function Home() {
+function Home(props: { onLogout: Function }) {
   return (
     <StyledCardHome>
       <h1>Welcome back!</h1>

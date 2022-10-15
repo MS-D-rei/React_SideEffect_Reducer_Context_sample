@@ -6,7 +6,7 @@ import {
   StyledNavButton,
 } from '@/components/MainHeader/NavigationStyle';
 
-function Navigation(props: { isLoggedIn: boolean; onLogout: Function }) {
+function Navigation(props: { isLoggedIn: boolean; onLogout: React.MouseEventHandler<HTMLButtonElement> }) {
   const loginListItems = props.isLoggedIn && (
     <React.Fragment>
       <StyledLI>
