@@ -46,10 +46,13 @@ function Login(props: { onLogin: Function }) {
   //     console.log('Clean up');
   //   };
   // }, [emailPassword]);
+  
+  const { isValid: isValidEmail } = emailState;
+  const { isValid: isValidPassword } = passwordState;
 
   useEffect(() => {
     const identifier = setTimeout(() => {
-      setIsValidForm(emailState.isValid && passwordState.isValid);
+      setIsValidForm(isValidEmail && isValidPassword);
       console.log('setTimeout works');
     }, 500);
 
@@ -57,7 +60,7 @@ function Login(props: { onLogin: Function }) {
       clearTimeout(identifier);
       console.log('Clean up');
     };
-  }, [emailState, passwordState])
+  }, [isValidEmail, isValidPassword])
 
   const emailChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     // setEmailPassword((prevState) => ({
