@@ -7,15 +7,19 @@ import {
   StyledAlignCenter,
 } from '@/components/Login/Style';
 import { StyledButton } from '@/components/UI/Button/StyledButton';
-import { emailRegEx, ReducerEmailActionTypes, emailReducer } from '@/components/Login/Logic';
+import {
+  ReducerEmailPasswordActionTypes,
+  emailReducer,
+  passwordReducer,
+} from '@/components/Login/Logic';
 
 function Login(props: { onLogin: Function }) {
-  const [emailPassword, setEmailPassword] = useState({
-    email: '',
-    password: '',
-  });
-  const [isValidEmail, setIsValidEmail] = useState(false);
-  const [isValidPassword, setIsValidPassword] = useState(false);
+  // const [emailPassword, setEmailPassword] = useState({
+  //   email: '',
+  //   password: '',
+  // });
+  // const [isValidEmail, setIsValidEmail] = useState(false);
+  // const [isValidPassword, setIsValidPassword] = useState(false);
   const [isValidForm, setIsValidForm] = useState(false);
 
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
@@ -23,12 +27,29 @@ function Login(props: { onLogin: Function }) {
     isValid: false,
   });
 
+  const [passwordState, dispatchPassword] = useReducer(passwordReducer, {
+    value: '',
+    isValid: false,
+  });
+
+  // useEffect(() => {
+  //   const identifier = setTimeout(() => {
+  //     setIsValidForm(
+  //       !!emailPassword.email.match(emailRegEx) &&
+  //         emailPassword.password.length >= 8
+  //     );
+  //     console.log('setTimeout works');
+  //   }, 500);
+
+  //   return () => {
+  //     clearTimeout(identifier);
+  //     console.log('Clean up');
+  //   };
+  // }, [emailPassword]);
+
   useEffect(() => {
     const identifier = setTimeout(() => {
-      setIsValidForm(
-        !!emailPassword.email.match(emailRegEx) &&
-          emailPassword.password.length >= 8
-      );
+      setIsValidForm(emailState.isValid && passwordState.isValid);
       console.log('setTimeout works');
     }, 500);
 
@@ -36,7 +57,7 @@ function Login(props: { onLogin: Function }) {
       clearTimeout(identifier);
       console.log('Clean up');
     };
-  }, [emailPassword]);
+  }, [emailState, passwordState])
 
   const emailChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     // setEmailPassword((prevState) => ({
@@ -44,7 +65,7 @@ function Login(props: { onLogin: Function }) {
     //   email: event.target.value,
     // }));
     dispatchEmail({
-      type: ReducerEmailActionTypes.USER_INPUT,
+      type: ReducerEmailPasswordActionTypes.USER_INPUT,
       payload: event.target.value,
     });
     // setIsValidForm(
@@ -56,10 +77,14 @@ function Login(props: { onLogin: Function }) {
   const passwordChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setEmailPassword((prevState) => ({
-      ...prevState,
-      password: event.target.value,
-    }));
+    // setEmailPassword((prevState) => ({
+    //   ...prevState,
+    //   password: event.target.value,
+    // }));
+    dispatchPassword({
+      type: ReducerEmailPasswordActionTypes.USER_INPUT,
+      payload: event.target.value,
+    });
     // setIsValidForm(
     //   !!emailPassword.email.match(emailRegEx) &&
     //     event.target.value.trim().length >= 8
@@ -67,20 +92,25 @@ function Login(props: { onLogin: Function }) {
   };
 
   const validateEmailHandler = () => {
+    // setIsValidEmail(!!emailPassword.email.match(emailRegEx));
     dispatchEmail({
-      type: ReducerEmailActionTypes.INPUT_BLUR,
+      type: ReducerEmailPasswordActionTypes.INPUT_BLUR,
       payload: '',
     });
-    // setIsValidEmail(!!emailPassword.email.match(emailRegEx));
   };
 
   const validatePasswordHandler = () => {
-    setIsValidPassword(emailPassword.password.trim().length >= 8);
+    // setIsValidPassword(emailPassword.password.trim().length >= 8);
+    dispatchPassword({
+      type: ReducerEmailPasswordActionTypes.INPUT_BLUR,
+      payload: '',
+    });
   };
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    props.onLogin(emailPassword.email, emailPassword.password);
+    // props.onLogin(emailPassword.email, emailPassword.password);
+    props.onLogin(emailState.value, passwordState.value);
   };
 
   return (
@@ -102,8 +132,8 @@ function Login(props: { onLogin: Function }) {
           <StyledInput
             type="password"
             id="password"
-            value={emailPassword.password}
-            isValid={isValidPassword}
+            value={passwordState.value}
+            isValid={passwordState.isValid}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
           />
