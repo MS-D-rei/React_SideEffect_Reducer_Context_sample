@@ -5,28 +5,38 @@ import {
   StyledA,
   StyledNavButton,
 } from '@/components/MainHeader/NavigationStyle';
+import AuthContext from '@/store/auth-context';
 
-function Navigation(props: { isLoggedIn: boolean; onLogout: React.MouseEventHandler<HTMLButtonElement> }) {
-  const loginListItems = props.isLoggedIn && (
-    <React.Fragment>
-      <StyledLI>
-        <StyledA href="/">Users</StyledA>
-      </StyledLI>
-      <StyledLI>
-        <StyledA href="/">Admin</StyledA>
-      </StyledLI>
-      <StyledLI>
-        <StyledNavButton onClick={props.onLogout}>Logout</StyledNavButton>
-      </StyledLI>
-    </React.Fragment>
-  );
+function Navigation(props: {
+  onLogout: React.MouseEventHandler<HTMLButtonElement>;
+}) {
 
   return (
-    <nav>
-      <StyledUL>
-        {loginListItems}
-      </StyledUL>
-    </nav>
+    <AuthContext.Consumer>
+      {(ctx) => {
+        return (
+          <nav>
+            <StyledUL>
+              {ctx.isLoggedIn && (
+                <React.Fragment>
+                  <StyledLI>
+                    <StyledA href="/">Users</StyledA>
+                  </StyledLI>
+                  <StyledLI>
+                    <StyledA href="/">Admin</StyledA>
+                  </StyledLI>
+                  <StyledLI>
+                    <StyledNavButton onClick={props.onLogout}>
+                      Logout
+                    </StyledNavButton>
+                  </StyledLI>
+                </React.Fragment>
+              )}
+            </StyledUL>
+          </nav>
+        );
+      }}
+    </AuthContext.Consumer>
   );
 }
 
