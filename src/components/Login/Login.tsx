@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import {
   StyledCardLogin,
   StyledAlignCenter,
@@ -111,16 +111,26 @@ function Login() {
 
   const authCtx = useAuthCtx();
 
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // props.onLogin(emailPassword.email, emailPassword.password);
-    authCtx.onLogin?.(emailState.value, passwordState.value);
+    if (isValidForm) {
+      authCtx.onLogin?.(emailState.value, passwordState.value);
+    } else if (!isValidEmail) {
+      emailInputRef.current?.focus(); 
+    } else {
+      passwordInputRef.current?.focus();
+    }
   };
 
   return (
     <StyledCardLogin>
       <form onSubmit={submitHandler}>
         <LoginInput
+          ref={emailInputRef}
           label="E-Mail"
           type="email"
           id="email"
@@ -130,6 +140,7 @@ function Login() {
           onBlur={validateEmailHandler}
         />
         <LoginInput
+          ref={passwordInputRef}
           label="Password"
           type="password"
           id="password"
@@ -139,7 +150,8 @@ function Login() {
           onBlur={validatePasswordHandler}
         />
         <StyledAlignCenter>
-          <StyledButton disabled={!isValidForm}>Login</StyledButton>
+          {/* <StyledButton disabled={!isValidForm}>Login</StyledButton> */}
+          <StyledButton >Login</StyledButton>
         </StyledAlignCenter>
       </form>
     </StyledCardLogin>

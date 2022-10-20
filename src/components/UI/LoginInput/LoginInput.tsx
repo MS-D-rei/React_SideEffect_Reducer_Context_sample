@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   StyledFormControl,
   StyledInput,
   StyledLabel,
 } from '@/components/Login/Style';
+
+type InputRef = HTMLInputElement;
 
 interface LoginInputProps {
   label: string;
@@ -15,28 +17,23 @@ interface LoginInputProps {
   onBlur: React.FocusEventHandler<HTMLInputElement>;
 }
 
-function LoginInput({
-  label,
-  type,
-  id,
-  value,
-  isValid,
-  onChange,
-  onBlur,
-}: LoginInputProps) {
-  return (
-    <StyledFormControl>
-      <StyledLabel htmlFor={id}>{label}</StyledLabel>
-      <StyledInput
-        type={type}
-        id={id}
-        value={value}
-        isValid={isValid}
-        onChange={onChange}
-        onBlur={onBlur}
-      />
-    </StyledFormControl>
-  );
-}
+const LoginInput = React.forwardRef<InputRef, LoginInputProps>(
+  ({ label, type, id, value, isValid, onChange, onBlur }, ref) => {
+    return (
+      <StyledFormControl>
+        <StyledLabel htmlFor={id}>{label}</StyledLabel>
+        <StyledInput
+          ref={ref}
+          type={type}
+          id={id}
+          value={value}
+          isValid={isValid}
+          onChange={onChange}
+          onBlur={onBlur}
+        />
+      </StyledFormControl>
+    );
+  }
+);
 
 export default LoginInput;
