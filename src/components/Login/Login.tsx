@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useContext, useEffect, useReducer, useState } from 'react';
 import {
   StyledCardLogin,
   StyledLabel,
@@ -12,8 +12,9 @@ import {
   emailReducer,
   passwordReducer,
 } from '@/components/Login/Logic';
+import { useAuthCtx } from '@/store/auth-context';
 
-function Login(props: { onLogin: Function }) {
+function Login() {
   // const [emailPassword, setEmailPassword] = useState({
   //   email: '',
   //   password: '',
@@ -110,10 +111,12 @@ function Login(props: { onLogin: Function }) {
     });
   };
 
+  const authCtx = useAuthCtx();
+
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // props.onLogin(emailPassword.email, emailPassword.password);
-    props.onLogin(emailState.value, passwordState.value);
+    authCtx.onLogin?.(emailState.value, passwordState.value);
   };
 
   return (

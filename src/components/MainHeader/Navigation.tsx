@@ -1,42 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   StyledUL,
   StyledLI,
   StyledA,
   StyledNavButton,
 } from '@/components/MainHeader/NavigationStyle';
-import AuthContext from '@/store/auth-context';
+import { useAuthCtx } from '@/store/auth-context';
 
-function Navigation(props: {
-  onLogout: React.MouseEventHandler<HTMLButtonElement>;
-}) {
-
+function Navigation() {
+  const authCtx = useAuthCtx();
   return (
-    <AuthContext.Consumer>
-      {(ctx) => {
-        return (
-          <nav>
-            <StyledUL>
-              {ctx.isLoggedIn && (
-                <React.Fragment>
-                  <StyledLI>
-                    <StyledA href="/">Users</StyledA>
-                  </StyledLI>
-                  <StyledLI>
-                    <StyledA href="/">Admin</StyledA>
-                  </StyledLI>
-                  <StyledLI>
-                    <StyledNavButton onClick={props.onLogout}>
-                      Logout
-                    </StyledNavButton>
-                  </StyledLI>
-                </React.Fragment>
-              )}
-            </StyledUL>
-          </nav>
-        );
-      }}
-    </AuthContext.Consumer>
+    <nav>
+      <StyledUL>
+        {authCtx.isLoggedIn && (
+          <React.Fragment>
+            <StyledLI>
+              <StyledA href="/">Users</StyledA>
+            </StyledLI>
+            <StyledLI>
+              <StyledA href="/">Admin</StyledA>
+            </StyledLI>
+            <StyledLI>
+              <StyledNavButton onClick={authCtx.onLogout}>Logout</StyledNavButton>
+            </StyledLI>
+          </React.Fragment>
+        )}
+      </StyledUL>
+    </nav>
   );
 }
 
