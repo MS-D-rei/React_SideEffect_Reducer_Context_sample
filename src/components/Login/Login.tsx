@@ -1,9 +1,6 @@
-import { useContext, useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import {
   StyledCardLogin,
-  StyledLabel,
-  StyledInput,
-  StyledFormControl,
   StyledAlignCenter,
 } from '@/components/Login/Style';
 import { StyledButton } from '@/components/UI/Button/StyledButton';
@@ -13,6 +10,7 @@ import {
   passwordReducer,
 } from '@/components/Login/Logic';
 import { useAuthCtx } from '@/store/auth-context';
+import LoginInput from '@/components/UI/LoginInput/LoginInput';
 
 function Login() {
   // const [emailPassword, setEmailPassword] = useState({
@@ -47,7 +45,7 @@ function Login() {
   //     console.log('Clean up');
   //   };
   // }, [emailPassword]);
-  
+
   const { isValid: isValidEmail } = emailState;
   const { isValid: isValidPassword } = passwordState;
 
@@ -61,7 +59,7 @@ function Login() {
       clearTimeout(identifier);
       console.log('Clean up');
     };
-  }, [isValidEmail, isValidPassword])
+  }, [isValidEmail, isValidPassword]);
 
   const emailChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     // setEmailPassword((prevState) => ({
@@ -122,28 +120,24 @@ function Login() {
   return (
     <StyledCardLogin>
       <form onSubmit={submitHandler}>
-        <StyledFormControl>
-          <StyledLabel htmlFor="email">E-Mail</StyledLabel>
-          <StyledInput
-            type="email"
-            id="email"
-            value={emailState.value}
-            isValid={emailState.isValid}
-            onChange={emailChangeHandler}
-            onBlur={validateEmailHandler}
-          />
-        </StyledFormControl>
-        <StyledFormControl>
-          <StyledLabel htmlFor="password">Password</StyledLabel>
-          <StyledInput
-            type="password"
-            id="password"
-            value={passwordState.value}
-            isValid={passwordState.isValid}
-            onChange={passwordChangeHandler}
-            onBlur={validatePasswordHandler}
-          />
-        </StyledFormControl>
+        <LoginInput
+          label="E-Mail"
+          type="email"
+          id="email"
+          value={emailState.value}
+          isValid={emailState.isValid}
+          onChange={emailChangeHandler}
+          onBlur={validateEmailHandler}
+        />
+        <LoginInput
+          label="Password"
+          type="password"
+          id="password"
+          value={passwordState.value}
+          isValid={passwordState.isValid}
+          onChange={passwordChangeHandler}
+          onBlur={validatePasswordHandler}
+        />
         <StyledAlignCenter>
           <StyledButton disabled={!isValidForm}>Login</StyledButton>
         </StyledAlignCenter>
